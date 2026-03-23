@@ -28,8 +28,8 @@ export const projects = [
     liveLink: "https://portfolioan-xi.vercel.app/",
     githubLink: "https://github.com/example/project2",
     images: [
-      "https://ik.imagekit.io/g1241mexj/WhatsApp%20Image%202026-03-21%20at%201.32.40%20PM.jpeg",
-      "https://ik.imagekit.io/g1241mexj/WhatsApp%20Image%202026-03-21%20at%201.32.40%20PM-Photoroom.png"
+      "https://ik.imagekit.io/g1241mexj/project%20images/Screenshot%202026-03-23%20210232.png",
+      "https://ik.imagekit.io/g1241mexj/project%20images/Screenshot%202026-03-23%20210045.png"
     ]
   },
   {
