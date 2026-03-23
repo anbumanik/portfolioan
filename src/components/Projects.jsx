@@ -143,7 +143,7 @@ export default function Projects() {
                   </p>
 
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
-                    {proj.tech.slice(0, 4).map(t => (
+                    {proj.tech.map(t => (
                       <span key={t} style={{
                         fontSize: 10, fontWeight: 700, background: "rgba(212,168,83,0.15)",
                         color: "#D4A853", padding: "4px 10px", borderRadius: 4, textTransform: "uppercase"

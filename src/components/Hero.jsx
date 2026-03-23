@@ -5,6 +5,7 @@ import { projects } from "../assets/projectConfig"; // Import local projects
 import BlurText from "./animations/BlurText";
 // import Folder from "./animations/Folder";
 import { heroImages } from "../assets/heroImage";
+import { aboutImages } from "../assets/aboutConfig";
 
 
 const NAV_LINKS = ["About", "Projects", "Services", "Contact"];
@@ -38,7 +39,7 @@ function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [displayCount, setDisplayCount] = useState(100);
   const [instaFollowers, setInstaFollowers] = useState(0);
-  const [instaImage, setInstaImage] = useState("https://ik.imagekit.io/g1241mexj/WhatsApp%20Image%202026-03-21%20at%201.32.40%20PM.jpeg"); // Example from projectConfig
+  const [instaImage, setInstaImage] = useState(aboutImages.image1); // Use central config
 
   useEffect(() => {
     let fAnim;
@@ -323,12 +324,13 @@ function Hero() {
             {/* Instagram Stats */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
                <div style={{
-                 width: 62, height: 62, borderRadius: "50%",
-                 border: "2px solid #D4A853", overflow: "hidden",
-                 padding: 3, background: "rgba(212,168,83,0.1)",
-                 boxShadow: "0 8px 16px rgba(0,0,0,0.4)"
+                 width: 76, height: 76, borderRadius: "50%",
+                 border: "2.5px solid #D4A853", overflow: "hidden",
+                 background: "rgba(212,168,83,0.15)",
+                 boxShadow: "0 10px 20px rgba(0,0,0,0.5)",
+                 display: "flex", alignItems: "center", justifyContent: "center"
                }}>
-                 <img src={instaImage} alt="IG" style={{ width: '100%', height: '100%', borderRadius: "50%", objectFit: "cover" }} />
+                 <img src={instaImage} alt="Profile" style={{ width: '100%', height: '100%', objectFit: "cover", objectPosition: "top" }} />
                </div>
                <div style={{ textAlign: "center" }}>
                   <div style={{

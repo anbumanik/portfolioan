@@ -79,7 +79,7 @@ function About() {
                 borderRadius: 28, overflow: "hidden", padding: 10,
                 background: "#111"
               }}>
-                <img src={profile.image1 || fallbackSVG} alt="Anbumani K" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
+                <img src={profile.image1 || fallbackSVG} alt="Anbumani K" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
               </div>
 
               {/* BACK FACE */}
@@ -90,9 +90,9 @@ function About() {
                 background: "#111"
               }}>
                 {profile.image2 ? (
-                  <img src={profile.image2} alt="Profile 2" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
+                  <img src={profile.image2} alt="Profile 2" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
                 ) : (
-                  <img src={fallbackSVG} alt="Fallback" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
+                  <img src={fallbackSVG} alt="Fallback" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 20 }} />
                 )}
               </div>
             </motion.div>

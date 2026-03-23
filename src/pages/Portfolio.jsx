@@ -1,12 +1,14 @@
+import React, { lazy, Suspense } from "react";
 import Background3D from "../components/animations/Background3D";
 import Hero from "../components/Hero";
-import About from "../components/About";
-import Projects from "../components/Projects";
-
-import CreativeSolutions from "../components/CreativeSolutions";
-import Contact from "../components/Contact";
-import Footer from "../components/Footer";
 import SplashCursor from "../components/animations/SplashCursor";
+
+// Lazy-load sections below the fold
+const About = lazy(() => import("../components/About"));
+const Projects = lazy(() => import("../components/Projects"));
+const CreativeSolutions = lazy(() => import("../components/CreativeSolutions"));
+const Contact = lazy(() => import("../components/Contact"));
+const Footer = lazy(() => import("../components/Footer"));
 
 export default function Portfolio() {
   return (
@@ -22,11 +24,13 @@ export default function Portfolio() {
       <Background3D />
       <div className="portfolio-inner">
         <Hero />
-        <About />
-        <Projects />
-        <CreativeSolutions />
-        <Contact />
-        <Footer />
+        <Suspense fallback={<div style={{ padding: "100px", textAlign: "center", color: "#D4A853" }}>Loading...</div>}>
+          <About />
+          <Projects />
+          <CreativeSolutions />
+          <Contact />
+          <Footer />
+        </Suspense>
       </div>
     </div>
   );
