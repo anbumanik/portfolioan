@@ -25,7 +25,7 @@ export const projects = [
     title: "LEARNING MANAGEMENT SYSTEM MERN STACK",
     description: "A premium e-commerce platform with seamless payment integration and advanced search filters.",
     tech: ["REACT", "TAILWIND CSS","NODE.js","EXPRESS.JS","MONGODB ATLES"],
-    liveLink: "https://portfolioan-xi.vercel.app/",
+    liveLink: "https://portfolioan-xi.vercel.11app/111",
     githubLink: "https://github.com/example/project2",
     images: [
       "https://ik.imagekit.io/g1241mexj/project%20images/Screenshot%202026-03-23%20210232.png",
