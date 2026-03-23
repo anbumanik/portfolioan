@@ -7,6 +7,7 @@ import { aboutImages } from "../assets/aboutConfig";
 
 function About() {
   const [profile, setProfile] = React.useState(aboutImages);
+  const [profileFlipped, setProfileFlipped] = React.useState(false);
 
 
   const education = [
@@ -56,10 +57,13 @@ function About() {
           {/* 3D Flip Card Container */}
           <motion.div
             initial="front"
-            whileHover="back"
+            animate={profileFlipped ? "back" : "front"}
+            onClick={() => setProfileFlipped(!profileFlipped)}
+            onHoverStart={() => setProfileFlipped(true)}
+            onHoverEnd={() => setProfileFlipped(false)}
             style={{
               position: "relative", width: "clamp(260px, 28vw, 360px)", aspectRatio: "4/5",
-              perspective: 1200, zIndex: 1
+              perspective: 1200, zIndex: 1, cursor: "pointer"
             }}
           >
             <motion.div

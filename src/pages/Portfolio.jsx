@@ -22,7 +22,7 @@ export default function Portfolio() {
         SPLAT_RADIUS={0.15}
       />
       <Background3D />
-      <div className="portfolio-inner">
+      <div className="portfolio-inner" style={{ position: "relative", zIndex: 10 }}>
         <Hero />
         <Suspense fallback={<div style={{ padding: "100px", textAlign: "center", color: "#D4A853" }}>Loading...</div>}>
           <About />

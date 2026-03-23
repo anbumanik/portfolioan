@@ -79,6 +79,7 @@ function SkillLogo({ name }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
       <motion.div
         whileHover={{ rotateX: -20, rotateY: 15, scale: 1.12, z: 40 }}
+        whileTap={{ rotateX: -20, rotateY: 15, scale: 1.12, z: 40 }}
         transition={{ type: "spring", stiffness: 260, damping: 18 }}
         style={{
           position: "relative",

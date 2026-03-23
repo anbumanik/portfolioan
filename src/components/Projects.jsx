@@ -1,11 +1,34 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useAnimationFrame, animate } from "framer-motion";
 import { projects } from "../assets/projectConfig";
 import BlurText from "./animations/BlurText";
 
 export default function Projects() {
-  // Duplicate for seamless scroll
-  const duplicatedProjects = [...projects, ...projects];
+  const [flippedIndex, setFlippedIndex] = useState(null);
+  const containerRef = useRef(null);
+  const x = useMotionValue(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Triple projects for infinite illusion
+  const duplicatedProjects = [...projects, ...projects, ...projects];
+  const cardWidth = 350;
+  const cardGap = 32;
+  const singleSetWidth = projects.length * (cardWidth + cardGap);
+
+  useAnimationFrame((t, delta) => {
+    if (isHovered || isDragging) return;
+    
+    // Smoothly scroll
+    let currentX = x.get();
+    currentX -= 0.5; // adjust speed here
+    
+    // Reset for infinite loop
+    if (currentX <= -singleSetWidth) {
+      currentX += singleSetWidth;
+    }
+    x.set(currentX);
+  });
 
   return (
     <section id="projects" style={{ padding: "clamp(60px, 10vw, 100px) 0", background: "#0D0D0D", overflow: "hidden" }}>
@@ -26,25 +49,23 @@ export default function Projects() {
             --card-img-height: 100px;
           }
         }
-        @keyframes marquee {
-          0% { transform: translate3d(0, 0, 0); }
-          100% { transform: translate3d(calc((var(--card-width) + var(--card-gap)) * -${projects.length}), 0, 0); }
-        }
-        .marquee-container {
-          will-change: transform;
-          display: flex;
-          gap: var(--card-gap);
-          padding: 20px 0;
-          animation: marquee ${projects.length * 15}s linear infinite;
-        }
-        .marquee-container:hover {
-          animation-play-state: paused !important;
-        }
+        
         .project-card-inner {
           transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
           transform-style: preserve-3d;
+          width: 100%;
+          height: 100%;
+          position: relative;
         }
-        .project-card:hover .project-card-inner {
+
+        /* Desktop Hover: Card Flips */
+        @media (hover: hover) {
+          .project-card:hover .project-card-inner {
+            transform: rotateY(180deg);
+          }
+        }
+        /* Mobile: Card Flips when state is active */
+        .project-card.is-flipped .project-card-inner {
           transform: rotateY(180deg);
         }
       `}</style>
@@ -69,45 +90,61 @@ export default function Projects() {
         </h2>
       </div>
 
-      {/* Infinite Auto-Sliding Container */}
-      <div style={{ display: "flex", width: "100%", overflow: "hidden", position: "relative" }}>
-        <div
-          className="marquee-container"
+      {/* Infinite Draggable Slider Container */}
+      <div 
+        ref={containerRef}
+        style={{ width: "100%", overflow: "hidden", position: "relative", cursor: "grab" }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <motion.div
+          drag="x"
+          style={{ 
+            x, 
+            display: "flex", 
+            gap: "var(--card-gap)", 
+            width: "max-content", 
+            padding: "20px 0" 
+          }}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={(event, info) => {
+            setIsDragging(false);
+            // Handle loop reset after drag
+            let currentX = x.get();
+            if (currentX > 0) x.set(currentX - singleSetWidth);
+            if (currentX < -singleSetWidth * 2) x.set(currentX + singleSetWidth);
+          }}
+          dragElastic={0.05}
+          whileTap={{ cursor: "grabbing" }}
         >
           {duplicatedProjects.map((proj, idx) => (
             <div
               key={idx}
-              className="project-card"
+              className={`project-card ${flippedIndex === idx ? "is-flipped" : ""}`}
+              onClick={() => {
+                setFlippedIndex(flippedIndex === idx ? null : idx);
+              }}
               style={{ perspective: 1200, width: "var(--card-width)", height: "var(--card-height)", flexShrink: 0 }}
             >
-              <div
-                className="project-card-inner"
-                style={{
-                  width: "100%", height: "100%", position: "relative"
-                }}
-              >
+              <div className="project-card-inner">
                 {/* ─── FRONT SIDE ─── */}
                 <div style={{
                   position: "absolute", width: "100%", height: "100%", backfaceVisibility: "hidden",
                   background: "#141414", borderRadius: 16, border: "1px solid #222", overflow: "hidden",
                   display: "flex", flexDirection: "column", transform: "translate3d(0,0,0)"
                 }}>
-                  {/* Image fills the entire card front */}
                   <div style={{ position: "absolute", inset: 0, overflow: "hidden", background: "#000" }}>
                     <img
                       src={proj.images[0]}
                       alt={proj.title}
                       loading="lazy"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                     />
-                    {/* Dark gradient overlay for text readability */}
                     <div style={{
                       position: "absolute", inset: 0,
                       background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%)"
                     }} />
                   </div>
-                  
-                  {/* Text content overlayed at the bottom */}
                   <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "24px 20px", zIndex: 1 }}>
                     <h3 style={{
                       color: "#fff", fontSize: 20, fontWeight: 900, fontFamily: "'Outfit', sans-serif", margin: 0,
@@ -133,15 +170,13 @@ export default function Projects() {
                       src={proj.images[1] || proj.images[0]}
                       alt={proj.title}
                       loading="lazy"
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
                     />
                   </div>
-
                   <h3 style={{ color: "#D4A853", fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{proj.title}</h3>
                   <p style={{ color: "#aaa", fontSize: 14, lineHeight: 1.6, marginBottom: 16, flexShrink: 0, overflow: "hidden", maxHeight: "72px" }}>
                     {proj.description}
                   </p>
-
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
                     {proj.tech.map(t => (
                       <span key={t} style={{
@@ -150,7 +185,6 @@ export default function Projects() {
                       }}>{t}</span>
                     ))}
                   </div>
-
                   <div style={{ display: "flex", gap: 10, borderTop: "1px solid #2A2A2A", paddingTop: 16, marginTop: "auto" }}>
                     <a
                       href={proj.liveLink} target="_blank" rel="noreferrer"
@@ -165,14 +199,8 @@ export default function Projects() {
                         letterSpacing: 0.5
                       }}
                     >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                        <polyline points="15 3 21 3 21 9" />
-                        <line x1="10" y1="14" x2="21" y2="3" />
-                      </svg>
                       Live Demo
                     </a>
-
                     <a
                       href={proj.githubLink} target="_blank" rel="noreferrer"
                       onClick={e => e.stopPropagation()}
@@ -186,9 +214,6 @@ export default function Projects() {
                         letterSpacing: 0.5
                       }}
                     >
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.298 24 12c0-6.627-5.373-12-12-12z" />
-                      </svg>
                       GitHub
                     </a>
                   </div>
@@ -196,7 +221,7 @@ export default function Projects() {
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       {/* Simplified background text layer for performance */}
@@ -237,4 +262,3 @@ export default function Projects() {
     </section>
   );
 }
-

@@ -104,15 +104,27 @@ function Hero() {
 
         {/* Desktop Nav */}
         <nav className="desktop-nav" style={{ display: "flex", gap: 32, alignItems: "center" }}>
+          <style>{`
+            .nav-link {
+              font-family: 'Outfit', sans-serif;
+              font-weight: 500;
+              font-size: 14px;
+              color: #aaa;
+              text-decoration: none;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              transition: color 0.2s;
+            }
+            @media (hover: hover) {
+              .nav-link:hover {
+                color: #D4A853 !important;
+              }
+            }
+          `}</style>
           {NAV_LINKS.map(link => (
-            <a key={link} href={`#${link.toLowerCase()}`} style={{
-              fontFamily: "'Outfit', sans-serif", fontWeight: 500, fontSize: 14,
-              color: "#aaa", textDecoration: "none", letterSpacing: 1,
-              textTransform: "uppercase", transition: "color 0.2s"
-            }}
-              onMouseEnter={e => e.target.style.color = "#D4A853"}
-              onMouseLeave={e => e.target.style.color = "#aaa"}
-            >{link}</a>
+            <a key={link} href={`#${link.toLowerCase()}`} className="nav-link">
+              {link}
+            </a>
           ))}
           <a href="#contact" style={{
             background: "linear-gradient(135deg,#D4A853,#A87D2E)", color: "#fff",

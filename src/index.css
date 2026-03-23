@@ -83,9 +83,11 @@ body {
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.panel:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(212,168,83,0.12);
+@media (hover: hover) {
+  .panel:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(212,168,83,0.12);
+  }
 }
 
 /* Animations */
@@ -226,8 +228,10 @@ body {
   transition: opacity 0.3s ease;
 }
 
-.animated-border-wrapper:hover::before {
-  opacity: 1; /* Brightens on hover */
+@media (hover: hover) {
+  .animated-border-wrapper:hover::before {
+    opacity: 1; /* Brightens on hover */
+  }
 }
 
 .animated-border-inner {
